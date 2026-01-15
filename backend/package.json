@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "unihub server",
+  "description": "nirmal server",
   "private": true,
   "scripts": {
     "dev": "tsx src/main.ts",
