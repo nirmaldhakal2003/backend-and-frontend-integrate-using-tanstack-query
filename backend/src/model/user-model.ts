@@ -25,13 +25,17 @@ export async function getAllUser(
   whereInput: TGetAllUserWhereInput,
   Pagination: TGetAllUserPaginationInput
 ) {
-  let tempWhereInput: Prisma.userWhereInput = {};
+  const prismaWhereInput: Prisma.userWhereInput = {
+    ...(whereInput.name && { name: { contains: whereInput.name } }),
+    ...(whereInput.email && { email: { contains: whereInput.email } }),
+  };
+
   const totalUsers = await prisma.user.count({
-    where: tempWhereInput,
+    where: prismaWhereInput,
   });
 
   const users = await prisma.user.findMany({
-    where: whereInput,
+    where: prismaWhereInput,
     take: Pagination.perPage,
     skip: (Pagination.page - 1) * Pagination.perPage,
   });

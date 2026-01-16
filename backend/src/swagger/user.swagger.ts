@@ -79,6 +79,15 @@ export const userPaths = {
             default: 10,
           },
         },
+        {
+          name: "name",
+          in: "query",
+          description: "Filter users by name",
+          required: false,
+          schema: {
+            type: "string",
+          },
+        },
       ],
 
       responses: {
