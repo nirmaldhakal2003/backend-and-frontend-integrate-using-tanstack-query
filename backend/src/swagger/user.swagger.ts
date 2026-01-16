@@ -3,7 +3,7 @@ export const userPaths = {
     post: {
       tags: ["Users"],
       summary: "Create a new user",
-      description: "Create a user with name and email",
+      description: "Create a user with name, email, and password",
 
       requestBody: {
         required: true,
@@ -11,7 +11,7 @@ export const userPaths = {
           "application/json": {
             schema: {
               type: "object",
-              required: ["name", "email"],
+              required: ["name", "email", "password"],
               properties: {
                 name: {
                   type: "string",
@@ -20,6 +20,10 @@ export const userPaths = {
                 email: {
                   type: "string",
                   example: "nirmal@gmail.com",
+                },
+                password: {
+                  type: "string",
+                  example: "securePassword123",
                 },
               },
             },
@@ -43,9 +47,67 @@ export const userPaths = {
             },
           },
         },
-
         400: {
           description: "Invalid input",
+        },
+      },
+    },
+
+    get: {
+      tags: ["Users"],
+      summary: "Get all users with pagination",
+      description: "Retrieve a list of users with pagination support",
+
+      parameters: [
+        {
+          name: "page",
+          in: "query",
+          description: "Page number for pagination",
+          required: false,
+          schema: {
+            type: "integer",
+            default: 1,
+          },
+        },
+        {
+          name: "perPage",
+          in: "query",
+          description: "Number of users per page",
+          required: false,
+          schema: {
+            type: "integer",
+            default: 10,
+          },
+        },
+      ],
+
+      responses: {
+        200: {
+          description: "A list of users",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  users: {
+                    type: "array",
+                    items: {
+                      type: "object",
+                      properties: {
+                        id: { type: "string" },
+                        name: { type: "string" },
+                        email: { type: "string" },
+                      },
+                    },
+                  },
+                  totalUsers: { type: "integer" },
+                },
+              },
+            },
+          },
+        },
+        500: {
+          description: "Internal Server Error",
         },
       },
     },
