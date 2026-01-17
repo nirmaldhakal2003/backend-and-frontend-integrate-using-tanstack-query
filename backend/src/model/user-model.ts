@@ -1,7 +1,25 @@
+import { TCreateUserSchema } from "../controllers/user/createUser-controller";
 import { Prisma } from "../generated/prisma/client";
+import { hashPassword } from "../lib/hash";
 import { prisma } from "../lib/prisma";
 
-export async function createUser(data: any) {
+export async function createUser(data: TCreateUserSchema) {
+  const userExists = await prisma.user.findFirst({
+    where: {
+      OR: [
+        {
+          email: data.email,
+        },
+        {
+          name: data.name,
+        },
+      ],
+    },
+  });
+  if (userExists) {
+    throw new Error(`User with given email or name already exists`);
+  }
+
   const createdUser = await prisma.user.create({
     data: {
       name: data.name,

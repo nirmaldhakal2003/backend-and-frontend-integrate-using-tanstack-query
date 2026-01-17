@@ -457,6 +457,10 @@ export type postUncheckedUpdateManyWithoutAuthorNestedInput = {
   deleteMany?: Prisma.postScalarWhereInput | Prisma.postScalarWhereInput[]
 }
 
+export type NullableStringFieldUpdateOperationsInput = {
+  set?: string | null
+}
+
 export type BoolFieldUpdateOperationsInput = {
   set?: boolean
 }
