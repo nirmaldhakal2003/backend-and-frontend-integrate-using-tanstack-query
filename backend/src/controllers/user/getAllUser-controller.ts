@@ -13,7 +13,7 @@ export const getAllUserController = async (req: Request, res: Response) => {
       {
         page: pageNumber,
         perPage: Number(perPage),
-      }
+      },
     );
     res.json({ message: "Users fetched successfully", data: users });
   } catch (error) {

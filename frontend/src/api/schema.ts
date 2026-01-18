@@ -3,6 +3,8 @@
  * Do not make direct changes to the file.
  */
 
+import type { JSX } from "react/jsx-runtime";
+
 export interface paths {
     "/users": {
         parameters: {
@@ -11,11 +13,56 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get?: never;
+        /**
+         * Get all users with pagination
+         * @description Retrieve a list of users with pagination support
+         */
+        get: {
+            parameters: {
+                query?: {
+                    /** @description Page number for pagination */
+                    page?: number;
+                    /** @description Number of users per page */
+                    perPage?: number;
+                    /** @description Filter users by name */
+                    name?: string;
+                };
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody?: never;
+            responses: {
+                /** @description A list of users */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            map /** @example securePassword123 */(arg0: (user: { name: string; email: string; id: string; }) => JSX.Element): import("react").ReactNode;
+                            users?: {
+                                id?: string;
+                                name?: string;
+                                email?: string;
+                            }[];
+                            totalUsers?: number;
+                        };
+                    };
+                };
+                /** @description Internal Server Error */
+                500: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
         put?: never;
         /**
          * Create a new user
-         * @description Create a user with name and email
+         * @description Create a user with name, email, and password
          */
         post: {
             parameters: {
@@ -31,6 +78,8 @@ export interface paths {
                         name: string;
                         /** @example nirmal@gmail.com */
                         email: string;
+                        /** @example securePassword123 */
+                        password: string;
                     };
                 };
             };
@@ -50,6 +99,73 @@ export interface paths {
                 };
                 /** @description Invalid input */
                 400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+            };
+        };
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/users/login": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Login a user
+         * @description Authenticate user with email and password
+         */
+        post: {
+            parameters: {
+                query?: never;
+                header?: never;
+                path?: never;
+                cookie?: never;
+            };
+            requestBody: {
+                content: {
+                    "application/json": {
+                        /** @example nirmal@gmail.com */
+                        email: string;
+                        /** @example securePassword123 */
+                        password: string;
+                    };
+                };
+            };
+            responses: {
+                /** @description Login successful */
+                200: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content: {
+                        "application/json": {
+                            id?: string;
+                            name?: string;
+                            email?: string;
+                            token?: string;
+                        };
+                    };
+                };
+                /** @description Invalid input */
+                400: {
+                    headers: {
+                        [name: string]: unknown;
+                    };
+                    content?: never;
+                };
+                /** @description Internal server error */
+                500: {
                     headers: {
                         [name: string]: unknown;
                     };
