@@ -14,7 +14,7 @@ export type TCreateUserSchema = z.infer<typeof CreateUserSchema>;
 export const createUserController = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const body = req.body;

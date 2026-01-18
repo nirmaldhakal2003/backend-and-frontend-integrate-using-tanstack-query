@@ -121,4 +121,58 @@ export const userPaths = {
       },
     },
   },
+
+  "/users/login": {
+    post: {
+      tags: ["Users"],
+      summary: "Login a user",
+      description: "Authenticate user with email and password",
+      requestBody: {
+        required: true,
+        content: {
+          "application/json": {
+            schema: {
+              type: "object",
+              required: ["email", "password"],
+              properties: {
+                email: {
+                  type: "string",
+                  example: "nirmal@gmail.com",
+                },
+                password: {
+                  type: "string",
+                  example: "securePassword123",
+                },
+              },
+            },
+          },
+        },
+      },
+
+      responses: {
+        200: {
+          description: "Login successful",
+          content: {
+            "application/json": {
+              schema: {
+                type: "object",
+                properties: {
+                  id: { type: "string" },
+                  name: { type: "string" },
+                  email: { type: "string" },
+                  token: { type: "string" },
+                },
+              },
+            },
+          },
+        },
+        400: {
+          description: "Invalid input",
+        },
+        500: {
+          description: "Internal server error",
+        },
+      },
+    },
+  },
 };
