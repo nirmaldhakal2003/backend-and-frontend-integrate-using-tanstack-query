@@ -1,6 +1,7 @@
 import { TCreateUserSchema } from "../controllers/user/createUser-controller";
+import { TLoginUserSchema } from "../controllers/user/loginUser-controller";
 import { Prisma } from "../generated/prisma/client";
-import { hashPassword } from "../lib/hash";
+import { comparePassword } from "../lib/hash";
 import { prisma } from "../lib/prisma";
 
 export async function createUser(data: TCreateUserSchema) {
@@ -41,7 +42,7 @@ type TGetAllUserPaginationInput = {
 };
 export async function getAllUser(
   whereInput: TGetAllUserWhereInput,
-  Pagination: TGetAllUserPaginationInput
+  Pagination: TGetAllUserPaginationInput,
 ) {
   const prismaWhereInput: Prisma.userWhereInput = {
     ...(whereInput.name && { name: { contains: whereInput.name } }),
@@ -58,4 +59,28 @@ export async function getAllUser(
     skip: (Pagination.page - 1) * Pagination.perPage,
   });
   return { users, totalUsers };
+}
+
+export async function loginUser(data: TLoginUserSchema) {
+  const userFound = await prisma.user.findFirst({
+    where: {
+      email: data.email,
+    },
+  });
+
+  if (!userFound) {
+    throw new Error(`You are not registered! Please register.`);
+  }
+
+  // check if password matches
+  const isPasswordCorrect = await comparePassword(
+    userFound.password,
+    data.password,
+  );
+
+  if (!isPasswordCorrect) {
+    throw new Error(`Username or password is incorrect!`);
+  }
+
+  return userFound;
 }
