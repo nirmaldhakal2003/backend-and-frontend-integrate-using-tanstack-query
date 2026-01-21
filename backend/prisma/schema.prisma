@@ -6,7 +6,25 @@
 
 generator client {
   provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  output   = "../src/contracts/__generated__/client "
+}
+generator zod {
+  provider                         = "npx zod-prisma-types"
+  output                           = "../src/contracts/__generated__/types"
+  prismaClientPath                 = "../client/client"
+  useMultipleFiles                 = false
+  writeBarrelFiles                 = false
+  createInputTypes                 = false
+  addInputTypeValidation           = false
+  addIncludeType                   = false
+  addSelectType                    = false
+  validateWhereUniqueInput         = true
+  createOptionalDefaultValuesTypes = false
+  createRelationValuesTypes        = false
+  createPartialTypes               = false
+  useDefaultValidators             = false
+  coerceDate                       = true
+  writeNullishInModelTypes         = false
 }
 
 datasource db {

@@ -1,8 +1,11 @@
 import express from "express";
 import swaggerUi from "swagger-ui-express";
-import { userRouter } from "./routers/user-routes";
-import { swaggerDocument } from "./swagger";
 import cors from "cors";
+import { createExpressEndpoints } from "@ts-rest/express";
+import { openApiDocument } from "./docs/open-api";
+import { errorHandler, notFoundHandler } from "./middleware/error-handler";
+import { userRouter } from "./routers/user-router";
+import { userContract } from "./contracts/user/contract";
 
 const app = express();
 
@@ -12,20 +15,25 @@ app.use(
     origin: "*",
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization"],
-  })
+  }),
 );
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-app.get("/api-docs.json", (req, res) => {
-  res.json(swaggerDocument);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(openApiDocument));
+app.use("/api-docs.json", (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.send(openApiDocument);
+  res.end();
 });
+
+createExpressEndpoints(userContract, userRouter, app);
+
+app.use(notFoundHandler);
+
+app.use(errorHandler);
 
 app.get("/", (req, res) => {
   res.send("Hello, World!");
 });
-
-userRouter(app);
 
 app.listen(3000, () => {
   console.log("Server is running at http://localhost:3000");
